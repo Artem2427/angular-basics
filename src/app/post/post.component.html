@@ -1,7 +1,8 @@
-<div class="post">
-  <h2>Post title</h2>
+<div>
+  <h2>{{ post.title }}</h2>
   <p>
-    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil voluptatibus
-    quae vero dolorum dolorem aliquam corporis dolore sed perferendis magni!
+    {{ post.text }}
   </p>
+  <button (click)="removePost()">&times;</button>
+  <ng-content></ng-content>
 </div>
