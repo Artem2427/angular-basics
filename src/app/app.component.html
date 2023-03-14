@@ -31,16 +31,142 @@
   <h1>Angular Components</h1>
   <app-post-form (onAdd)="updatePosts($event)"></app-post-form>
   <hr />
-  <app-post
+  <!-- <app-post
     *ngFor="let post of posts"
     [post]="post"
     (onRemove)="removePost($event)"
   >
     <div #info>Hello</div>
-  </app-post>
+  </app-post> -->
 
   <p appStyle="red" [dStyles]="{ border: '1px solid blue' }">
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam id totam,
     tempore tempora ut ducimus?
   </p>
+  <button (click)="isVisible = !isVisible">Toggle</button>
+
+  <div *appIfnot="!isVisible">
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+      soluta ex sint facilis incidunt dolor.
+    </p>
+  </div>
+  <p>{{ e | number : "1.1-2" }}</p>
+  <p>{{ str | uppercase | lowercase | titlecase }}</p>
+  <p>{{ str | slice : 1 : 5 }}</p>
+  <p>{{ date | date : "dd.LL.yyyy, HH:mm:ss" }}</p>
+  <p>{{ float }}</p>
+  <p>{{ float | currency }}</p>
+  <p>{{ float | percent : "2.0-0" }}</p>
+  <pre>{{ obj | json }}</pre>
+  {{ 10 | mult : 4 }}
+  <button (click)="searchField = 'title'">Title</button>
+  <button (click)="searchField = 'text'">Text</button>
+  <input type="text" [(ngModel)]="search" />
+  <div *ngFor="let post of posts | filter : search || '' : searchField">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.text }}</p>
+  </div>
+
+  <p>Wait for it... {{ promise | async }}</p>
+  <p>Date: {{ date$ | async | date : "yyyy.MM.dd, HH:mm:ss" }}</p>
+  <p>Date: {{ date2 | date : "yyyy.MM.dd, HH:mm:ss" }}</p>
+
+  <h2>App counter: {{ appCounterService.counter }}</h2>
+  <button class="btn" (click)="appCounterService.increase()">+</button>
+  <button class="btn" (click)="appCounterService.decrease()">-</button>
+</div>
+
+<div class="container">
+  <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Angular Forms</h1>
+
+    <div class="form-control">
+      <label>Email</label>
+      <input type="text" placeholder="Email" formControlName="email" />
+      <div
+        class="validation"
+        *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+      >
+        <small *ngIf="form.get('email')?.errors?.['required']"
+          >Поле email не может быть пустым
+        </small>
+        <small *ngIf="form.get('email')?.errors?.['email']"
+          >Введите корректный email</small
+        >
+        <small *ngIf="form.get('email')?.errors?.['restrictedEmail']"
+          >Email {{ form.get("email")?.value }} запрещен</small
+        >
+        <small *ngIf="form.get('email')?.errors?.['uniqEmail']"
+          >Email {{ form.get("email")?.value }} уже используется</small
+        >
+      </div>
+    </div>
+
+    <div class="form-control">
+      <label>Пароль</label>
+      <input type="password" placeholder="Пароль" formControlName="password" />
+      <!-- <pre>{{ form.get("password")?.errors | json }}</pre> -->
+      <div
+        class="validation"
+        *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+      >
+        <small *ngIf="form.get('password')?.errors?.['required']">
+          Пароль не может быть пустым
+        </small>
+        <small *ngIf="form.get('password')?.errors?.['minlength']">
+          Длина должна быть не менее
+          {{form.get('password')?.errors?.['minlength'].requiredLength}}. Сейчас
+          количество символов
+          {{form.get('password')?.errors?.['minlength'].actualLength}}
+        </small>
+      </div>
+    </div>
+
+    <div class="card" formGroupName="address">
+      <h2>Адрес</h2>
+
+      <div class="form-control">
+        <label>Страна</label>
+
+        <select formControlName="country">
+          <option value="ru">Рашка</option>
+          <option value="ua">Украина</option>
+          <option value="by">Беларусь</option>
+        </select>
+      </div>
+
+      <div class="form-control">
+        <input type="text" formControlName="city" />
+      </div>
+
+      <button class="btn" type="button" (click)="setCapital()">
+        Выбрать столицу
+      </button>
+    </div>
+
+    <div class="card" formGroupName="skills">
+      <h2>Ваши навыки</h2>
+      <button class="btn" type="button" (click)="addSkill()">
+        Добавить умение
+      </button>
+      <div
+        class="form-control"
+        *ngFor="let control of getControls(); let idx = index"
+      >
+        <label>Умение {{ idx + 1 }}</label>
+        <input type="text" [formControlName]="idx" />
+      </div>
+    </div>
+
+    <button class="btn" type="submit" [disabled]="form.invalid || form.pending">
+      Отправить
+    </button>
+  </form>
+  <app-switch
+    [(ngModel)]="appState"
+    (ngModelChange)="handleChange()"
+  ></app-switch>
+  <hr />
+  <p>AppState: {{ appState }}</p>
 </div>
